@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 const {Client, GatewayIntentBits, Events} = require("discord.js");
 const getMeme = require("./utils/getMeme");
 
-
+let interval;
 dotenv.config();
 
 const client = new Client({ intents: [ 
@@ -10,6 +10,7 @@ const client = new Client({ intents: [
     GatewayIntentBits.GuildMessages, 
     GatewayIntentBits.MessageContent 
 ] });
+
 
 client.on(Events.ClientReady, () => {
     console.log(`Logged in as ${client.user.tag} !`);
@@ -29,8 +30,17 @@ client.on(Events.MessageCreate, async msg => {
             break;
 
         case "!eye":
-            msg.channel.send("You are now subscribed to eye reminders.")
-        
+            msg.channel.send("You are now subscribed to eye reminders.");
+            interval = setInterval(() => {
+                msg.channel.send("Please take an eye break now!")
+                    .catch(console.error);
+            }, 1000*5);
+            break;
+
+        case "!stop":
+            msg.channel.send("You have stopped the eye reminders");
+            clearInterval(interval);
+            break;
     }
 });
 
