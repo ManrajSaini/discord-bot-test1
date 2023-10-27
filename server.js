@@ -1,5 +1,7 @@
 const dotenv = require("dotenv");
 const {Client, GatewayIntentBits, Events} = require("discord.js");
+const getMeme = require("./utils/getMeme");
+
 
 dotenv.config();
 
@@ -14,12 +16,23 @@ client.on(Events.ClientReady, () => {
 });
 
 
-client.on(Events.MessageCreate, msg => {
-    if(msg.content === 'ping'){
-        msg.reply("Pong");
+client.on(Events.MessageCreate, async msg => {
+    switch(msg.content){
+        case "ping":
+            msg.reply("Pong !!");
+            break;
+        
+        case "!meme":
+            msg.channel.send("Here's your meme 😂");
+            const img = await getMeme();
+            msg.channel.send(img);
+            break;
+
+        case "!eye":
+            msg.channel.send("You are now subscribed to eye reminders.")
+        
     }
 });
-
 
 
 client.login(process.env.CLIENT_TOKEN);
